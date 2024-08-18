@@ -53,15 +53,18 @@ public class PlayerController : MonoBehaviour
         if (wallHit.collider != null){
             velocityOrientationMultiplier = 1;
         }
-        Vector3 MoveVector = new Vector3(velocityX * velocityOrientationMultiplier * Time.deltaTime, 0, 0);
-        print((prevPosition - (transform.position + MoveVector)).magnitude);
-        if ((prevPosition - (transform.position + MoveVector)).magnitude > 0.05)
-        {
-            transform.position += MoveVector;
-            prevPosition = transform.position;
-        }
-
+        //Vector3 MoveVector = new Vector3(velocityX * velocityOrientationMultiplier * Time.deltaTime, 0, 0);
+        //print((prevPosition - (transform.position + MoveVector)).magnitude);
+        //if ((prevPosition - (transform.position + MoveVector)).magnitude > 0.05)
+        //{
+        //    transform.position += MoveVector;
+        //    prevPosition = transform.position;
+        //}
+        rb.velocity = new Vector2(velocityOrientationMultiplier * velocityX, rb.velocity.y);
+        
+        
         if (Input.GetKeyDown(KeyCode.Space)){
+            print("asdsadsadas");
             JumpTry();
         }    
 
@@ -70,14 +73,11 @@ public class PlayerController : MonoBehaviour
 
         // left mouse button scales player down
         if (Input.GetKey(KeyCode.Mouse0) && transform.localScale.x > minScale){
-            print(scalingSpeed);
             transform.localScale *= 1 - scalingSpeed* Time.deltaTime;
             height *= 1 - scalingSpeed * Time.deltaTime;
             width *= 1 - scalingSpeed * Time.deltaTime;
             rb.mass *= 1 - scalingMass * Time.deltaTime;
             jumpForce *= 1 - scalingJump * Time.deltaTime;
-            print(scalingSpeed);
-            print(scalingMass);
         }
 
         // right mouse button scales player up
@@ -87,7 +87,6 @@ public class PlayerController : MonoBehaviour
             width *= 1 + scalingSpeed * Time.deltaTime;
             rb.mass *= 1 + scalingMass * Time.deltaTime;
             jumpForce *= 1 + scalingJump * Time.deltaTime;
-            print(rb.mass);
             
         }
     }
@@ -95,9 +94,11 @@ public class PlayerController : MonoBehaviour
     private void JumpTry()
     {
         RaycastHit2D hit = Physics2D.Raycast(rb.position, Vector2.down, height, LayerMask.GetMask("Ground"));
-
+        print("Hello");
         // print("try jump height (max distance to trigger the jump) = " + height);
-        if (hit.collider != null){
+        if (hit.collider != null)
+        {
+            print("I am here");
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
     }
