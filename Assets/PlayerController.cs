@@ -12,10 +12,16 @@ public class PlayerController : MonoBehaviour
     private float sizeBuffer = 0.02f;
     public float jumpForce = 5.0f;
     public float velocityX = 3f;
-    public float scalingSpeed = 0.01f;
-    public float minScale = 0.3f;
+    public float scalingSpeed = 1f;
+    public float scalingMass = 0.5f;
+    public float scalingJump = 0.6f;
+    public float minScale = 0.4f;
     public float maxScale = 3f;
-    private int velocityOrientationMultiplier = 1;
+    public float minMass = 0.3f;
+    public float maxMass = 3f;
+    private float velocityOrientationMultiplier = 1;
+    private Vector3 prevPosition;
+
 
     private RaycastHit2D wallHit = new();
 
@@ -31,7 +37,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        prevPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -47,7 +53,13 @@ public class PlayerController : MonoBehaviour
         if (wallHit.collider != null){
             velocityOrientationMultiplier = 1;
         }
-        transform.position += new Vector3(velocityX * velocityOrientationMultiplier * Time.deltaTime, 0, 0);
+        Vector3 MoveVector = new Vector3(velocityX * velocityOrientationMultiplier * Time.deltaTime, 0, 0);
+        print((prevPosition - (transform.position + MoveVector)).magnitude);
+        if ((prevPosition - (transform.position + MoveVector)).magnitude > 0.05)
+        {
+            transform.position += MoveVector;
+            prevPosition = transform.position;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)){
             JumpTry();
@@ -58,16 +70,25 @@ public class PlayerController : MonoBehaviour
 
         // left mouse button scales player down
         if (Input.GetKey(KeyCode.Mouse0) && transform.localScale.x > minScale){
-            transform.localScale *= 1 - scalingSpeed;
-            height *= 1 - scalingSpeed;
-            width *= 1 - scalingSpeed;
+            print(scalingSpeed);
+            transform.localScale *= 1 - scalingSpeed* Time.deltaTime;
+            height *= 1 - scalingSpeed * Time.deltaTime;
+            width *= 1 - scalingSpeed * Time.deltaTime;
+            rb.mass *= 1 - scalingMass * Time.deltaTime;
+            jumpForce *= 1 - scalingJump * Time.deltaTime;
+            print(scalingSpeed);
+            print(scalingMass);
         }
 
         // right mouse button scales player up
         if (Input.GetKey(KeyCode.Mouse1) && transform.localScale.x < maxScale){
-            transform.localScale *= 1 + scalingSpeed;
-            height *= 1 + scalingSpeed;
-            width *= 1 + scalingSpeed;
+            transform.localScale *= 1 + scalingSpeed* Time.deltaTime;
+            height *= 1 + scalingSpeed *Time.deltaTime;
+            width *= 1 + scalingSpeed * Time.deltaTime;
+            rb.mass *= 1 + scalingMass * Time.deltaTime;
+            jumpForce *= 1 + scalingJump * Time.deltaTime;
+            print(rb.mass);
+            
         }
     }
 
