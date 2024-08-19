@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private CircleCollider2D circleCollider;
     private float height;
+    private float timer;
     private float width;
     private float sizeBuffer = 0.02f;
     public float jumpForce = 5.0f;
@@ -19,8 +21,9 @@ public class PlayerController : MonoBehaviour
     public float maxScale = 3f;
     public float minMass = 0.3f;
     public float maxMass = 3f;
+    public bool isCountDownAcc = false;
+    public short lives = 3;
     private float velocityOrientationMultiplier = 1;
-    private Vector3 prevPosition;
 
 
     private RaycastHit2D wallHit = new();
@@ -36,15 +39,16 @@ public class PlayerController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        prevPosition = transform.position;
+    {   
+        rb.velocity = new Vector2(velocityX * velocityOrientationMultiplier, rb.velocity.y);
     }
 
     // Update is called once per frame
     void Update()
     {
-        // check wall hit
-        if (velocityOrientationMultiplier == 1){
+        
+            // check wall hit
+            if (velocityOrientationMultiplier == 1){
             wallHit = Physics2D.Raycast(rb.position, Vector2.right, width, LayerMask.GetMask("Wall"));
             if (wallHit.collider != null){
                 AudioManager.PlaySound("ball_hit");
@@ -60,9 +64,29 @@ public class PlayerController : MonoBehaviour
                 velocityOrientationMultiplier = 1;
             }
         }
+        if (isCountDownAcc == false)
+        {
+            if (Mathf.Abs(rb.velocity.x - velocityX) < 0.2f || Mathf.Abs(rb.velocity.x + velocityX) < 0.2f || Mathf.Abs(rb.velocity.x) < 3.5f)
+            {
+                rb.velocity = new Vector2(velocityX * velocityOrientationMultiplier, rb.velocity.y);
+            }
+            else
+            {
+                rb.velocity += new Vector2(-Mathf.Sign(rb.velocity.x - velocityX) * 0.1f, 0);
 
+            }
+        }
+        else
+        {
+            if (timer > 2)
+            {
+                isCountDownAcc = false;
+                timer = 0;
+            }
+            timer += Time.deltaTime;
+        }
         
-        rb.velocity = new Vector2(velocityX * velocityOrientationMultiplier, rb.velocity.y);
+        //rb.velocity = new Vector2(velocityX * velocityOrientationMultiplier, rb.velocity.y);
         // Vector3 MoveVector = new Vector3(velocityX * velocityOrientationMultiplier * Time.deltaTime, 0, 0);
         // // print((prevPosition - (transform.position + MoveVector)).magnitude);
         // if ((prevPosition - (transform.position + MoveVector)).magnitude > 0.05)
@@ -128,5 +152,21 @@ public class PlayerController : MonoBehaviour
             AudioManager.PlaySound("jump");
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
+    }
+
+    public void getHit()
+    {
+        lives -= 1;
+        float yVelocity;
+        if (rb.velocity.y == 0)
+        {
+            yVelocity = jumpForce;
+        }
+        else
+        {
+            yVelocity = -rb.velocity.y* 1.5f;
+        }
+        rb.AddForce(new Vector2(-rb.velocity.x * 5f * rb.mass, jumpForce), ForceMode2D.Impulse);
+        isCountDownAcc = true;
     }
 }
