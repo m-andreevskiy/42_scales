@@ -23,11 +23,13 @@ public class acceleration : MonoBehaviour
         
         if (collision.gameObject.name == "Player")
         {
-            print("OOO");
+            AudioManager.PlaySound("boing");
+
+            // print("OOO");
             Rigidbody2D PlayerRb = player.GetComponent<Rigidbody2D>();
-            print(gameObject.transform.rotation.eulerAngles);
+            // print(gameObject.transform.rotation.eulerAngles);
             Vector2 vec = degreeToVector(gameObject.transform.rotation.eulerAngles.z) * accelerationCoef;
-            print(vec);
+            // print(vec);
             if (PlayerRb.velocity.x* vec.x < 0)
             {
                 player.isCountDownAcc = true;
@@ -41,7 +43,7 @@ public class acceleration : MonoBehaviour
     {
         float radians = degree * (Mathf.PI / 180f);
         Vector2 vec =  new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
-        print(vec);
+        // print(vec);
         return vec;
     }
 }

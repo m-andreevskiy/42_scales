@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    static AudioClip ballHitSound, ballExpandingSound, ballShrinkingSound, jumpSound;
+    static AudioClip ballHitSound, ballExpandingSound, ballShrinkingSound, jumpSound, boingSound, gameOverSound, spikeSound, victorySound;
     
     static AudioSource audioSource;
 
@@ -15,7 +15,11 @@ public class AudioManager : MonoBehaviour
         ballHitSound = Resources.Load<AudioClip>("Audio/Ball_hit");
         ballExpandingSound = Resources.Load<AudioClip>("Audio/Ball_expanding");
         ballShrinkingSound = Resources.Load<AudioClip>("Audio/Ball_shrinking");
-        jumpSound =Resources.Load<AudioClip>("Audio/Jump");
+        jumpSound = Resources.Load<AudioClip>("Audio/Jump");
+        boingSound = Resources.Load<AudioClip>("Audio/Boing");
+        gameOverSound = Resources.Load<AudioClip>("Audio/Game_over");
+        spikeSound = Resources.Load<AudioClip>("Audio/Spike_hit");
+        victorySound = Resources.Load<AudioClip>("Audio/Victory");
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -41,6 +45,23 @@ public class AudioManager : MonoBehaviour
                 audioSource.clip = ballShrinkingSound;
                 audioSource.Play();
                 break;
+
+            case "game_over":
+                audioSource.PlayOneShot(gameOverSound);
+                break;
+
+            case "victory":
+                audioSource.PlayOneShot(victorySound);
+                break;
+
+            case "boing":
+                audioSource.PlayOneShot(boingSound);
+                break;
+
+            case "spike_hit":
+                audioSource.PlayOneShot(spikeSound);
+                break;
+            
 
         }
     }

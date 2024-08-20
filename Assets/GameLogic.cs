@@ -46,6 +46,8 @@ public class GameLogic : MonoBehaviour
     public void GetDamage()
     {if (immortalityTimer <= 0)
         {
+            AudioManager.PlaySound("spike_hit");
+
             lives -= 1;
             textScore.text = "Lives: " + lives.ToString();
             if (lives <= 0)
@@ -59,14 +61,22 @@ public class GameLogic : MonoBehaviour
     }
     public void GameOver()
     {
+        MusicManager.StopMusic();
+        AudioManager.PlaySound("game_over");
+
         gameoverScreen.SetActive(true);
     }
     public void Winnning()
     {
+        MusicManager.StopMusic();
+        AudioManager.PlaySound("victory");
+
         winningScreen.SetActive(true);
     }
     public void RestartGame()
     {
+        MusicManager.StartMusic();
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1;
     }
