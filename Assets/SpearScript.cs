@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpearScript : MonoBehaviour
 {
     public PlayerController player;
+    public GameLogic gameLogic;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +22,7 @@ public class SpearScript : MonoBehaviour
         if (collision.gameObject.name == "Player")
         {
             player.getHit();
+            gameLogic.GetDamage();
         }
     }
 }
