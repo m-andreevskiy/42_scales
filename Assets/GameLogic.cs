@@ -13,6 +13,8 @@ public class GameLogic : MonoBehaviour
     public GameObject gameoverScreen;
     public GameObject pauseScene;
     private bool isGamePause = false;
+    public float immortalityTimer = 0;
+    public PlayerController playerController;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,16 +36,24 @@ public class GameLogic : MonoBehaviour
             ResumeGame();
       
         }
+        if (immortalityTimer > 0)
+        {
+            immortalityTimer -= Time.deltaTime * 2f;
+        }
     }
     [ContextMenu("Increase score")]
     public void GetDamage()
-    {
-        lives -= 1;
-        textScore.text = "Lives: " + lives.ToString();
-        if (lives <= 0)
+    {if (immortalityTimer <= 0)
         {
-            lives = 0;
-            GameOver();
+            lives -= 1;
+            textScore.text = "Lives: " + lives.ToString();
+            if (lives <= 0)
+            {
+                lives = 0;
+                GameOver();
+            }
+            immortalityTimer = 5;
+            playerController.getHit();
         }
     }
     public void GameOver()

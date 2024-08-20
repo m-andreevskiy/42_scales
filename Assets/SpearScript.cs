@@ -17,11 +17,11 @@ public class SpearScript : MonoBehaviour
     {
         
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "Player")
         {
-            player.getHit();
+            
             gameLogic.GetDamage();
         }
     }
