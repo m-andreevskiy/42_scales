@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     public float maxMass = 3f;
     public bool isCountDownAcc = false;
     public short lives = 3;
-    private float velocityOrientationMultiplier = 1;
+    public float velocityOrientationMultiplier = 1;
 
 
     private RaycastHit2D wallHit = new();
