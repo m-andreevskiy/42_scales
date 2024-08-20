@@ -19,8 +19,8 @@ public class PlayerController : MonoBehaviour
     public float scalingJump = 0.6f;
     public float minScale = 0.4f;
     public float maxScale = 3f;
-    public float minMass = 0.3f;
-    public float maxMass = 3f;
+    public float minMass = 0.7553576f;
+    public float maxMass = 2.1f;
     public bool isCountDownAcc = false;
     public short lives = 3;
     public float velocityOrientationMultiplier = 1;
@@ -126,6 +126,9 @@ public class PlayerController : MonoBehaviour
             height *= 1 - scalingSpeed * Time.deltaTime;
             width *= 1 - scalingSpeed * Time.deltaTime;
             rb.mass *= 1 - scalingMass * Time.deltaTime;
+            if (transform.localScale.x < minScale){
+                rb.mass = minMass;
+            }
             jumpForce *= 1 - scalingJump * Time.deltaTime;
             // print(scalingSpeed);
             // print(scalingMass);
@@ -137,6 +140,9 @@ public class PlayerController : MonoBehaviour
             height *= 1 + scalingSpeed *Time.deltaTime;
             width *= 1 + scalingSpeed * Time.deltaTime;
             rb.mass *= 1 + scalingMass * Time.deltaTime;
+            if (rb.mass > maxMass){
+                rb.mass = maxMass;
+            }
             jumpForce *= 1 + scalingJump * Time.deltaTime;
             // print(rb.mass);
         }
