@@ -12,6 +12,7 @@ public class GameLogic : MonoBehaviour
     public int lives = 3;
     public GameObject gameoverScreen;
     public GameObject pauseScene;
+    public GameObject winningScreen;
     private bool isGamePause = false;
     public float immortalityTimer = 0;
     public PlayerController playerController;
@@ -59,6 +60,10 @@ public class GameLogic : MonoBehaviour
     public void GameOver()
     {
         gameoverScreen.SetActive(true);
+    }
+    public void Winnning()
+    {
+        winningScreen.SetActive(true);
     }
     public void RestartGame()
     {
